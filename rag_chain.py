@@ -23,15 +23,23 @@ class RAGChain:
 
     def get_template(self):
         chat_template = ChatPromptTemplate.from_messages([
-        # System Message Prompt Template
-        SystemMessage(content="""You are a Helpful AI Bot.
-                    Given a context and question from user,
-                    you should answer based on the given context."""),
-        # Human Message Prompt Template
-        HumanMessagePromptTemplate.from_template("""Answer the question based on the given context.
-        Context: {context}
-        Question: {question}
-        Answer: """)
+            # System Message Prompt Template
+            SystemMessage(content="""You are a knowledgeable AI assistant for an interactive product catalog.
+                        Your goal is to provide accurate and concise answers based on the given catalog context.
+                        You should:
+                        1. Extract relevant product details or information from the provided context.
+                        2. If the question is unclear, ask for clarification.
+                        3. Maintain context for follow-up questions to ensure a seamless user experience.
+                        4. Provide structured, easy-to-read responses where applicable."""),
+            
+            # Human Message Prompt Template
+            HumanMessagePromptTemplate.from_template("""Answer the question based on the given context.
+            If no relevant information is found in the context, respond with:
+            "I'm sorry, I couldn't find the information in the current context. Could you refine your query?"
+            
+            Context: {context}
+            Question: {question}
+            Answer: """)
         ])
         return chat_template
     

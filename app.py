@@ -27,23 +27,23 @@ st.title("RAG Chatbot")
 uploaded_file = st.file_uploader("Upload a text file for the knowledge base", type="txt")
 
 if uploaded_file:
-    with open("transcription.txt", "wb") as f:
+    with open("transcription.txt", "ab") as f:
         f.write(uploaded_file.getbuffer())
 
     chatbot = initialize_chatbot("transcription.txt")
 
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+chatbot = initialize_chatbot("transcription.txt")
 
-    for message in st.session_state.messages:
-        st.chat_message(message["role"]).markdown(message["content"])
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-    if prompt := st.chat_input("Ask a question"):
-        st.chat_message("user").markdown(prompt)
-        st.session_state.messages.append({"role": "user", "content": prompt})
+for message in st.session_state.messages:
+    st.chat_message(message["role"]).markdown(message["content"])
 
-        response = chatbot.get_response(prompt)
-        st.chat_message("assistant").markdown(response)
-        st.session_state.messages.append({"role": "assistant", "content": response})
-else:
-    st.write("Please upload a text file to start chatting!")
+if prompt := st.chat_input("Ask a question"):
+    st.chat_message("user").markdown(prompt)
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
+    response = chatbot.get_response(prompt)
+    st.chat_message("assistant").markdown(response)
+    st.session_state.messages.append({"role": "assistant", "content": response})
